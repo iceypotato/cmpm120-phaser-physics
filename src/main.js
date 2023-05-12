@@ -9,14 +9,15 @@ let gamecfg = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 100 },
+            gravity: { y: 1000 },
             debug: true
         }
     },
-    physics: "arcade",
     scene: [
-        StartGameScene,
-        PlatformerScene
+        // StartGameScene,
+        // PlatformerStage1Scene,
+        // PlatformerStage2Scene,
+        PlatformerStage3Scene
     ]
 }
 

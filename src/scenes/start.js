@@ -26,7 +26,7 @@ class StartGameScene extends Phaser.Scene {
         click.setAlign("center")
         click.setFontSize(100)
         click.setOrigin(0.5, 0.5)
-        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {this.scene.start("platformer")})
+        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {this.scene.start("stage1")})
     }
 
 }
