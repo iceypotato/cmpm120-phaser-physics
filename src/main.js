@@ -14,10 +14,11 @@ let gamecfg = {
         }
     },
     scene: [
-        // StartGameScene,
-        // PlatformerStage1Scene,
-        // PlatformerStage2Scene,
-        PlatformerStage3Scene
+        StartGameScene,
+        PlatformerStage1Scene,
+        PlatformerStage2Scene,
+        PlatformerStage3Scene,
+        ResultsScene,
     ]
 }
 

@@ -26,7 +26,13 @@ class StartGameScene extends Phaser.Scene {
         click.setAlign("center")
         click.setFontSize(100)
         click.setOrigin(0.5, 0.5)
-        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {this.scene.start("stage1")})
+        let scenedata = {
+            timeelapsed: this.timeelapsed,
+            nextScene: "stage1",
+            inst: "Press A and D to move left and right respectively.",
+            prevScene: "start game",
+        }
+        this.input.on(Phaser.Input.Events.POINTER_DOWN, () => {this.scene.start("results", scenedata)})
     }
 
 }

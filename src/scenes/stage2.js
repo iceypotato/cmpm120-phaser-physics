@@ -1,7 +1,7 @@
 class PlatformerStage2Scene extends Phaser.Scene {
 
     constructor() {
-        super("stage 2")
+        super("stage2")
     }
     
     preload() {
@@ -17,20 +17,30 @@ class PlatformerStage2Scene extends Phaser.Scene {
 
         this.load.audio("get crystal heart", "crystal heart get.wav")
 
+        this.timeelapsed = 0
+
         this.cameras.main.setBackgroundColor(0x83E8FF)
     }
 
     create() {
-        // this.platforms = this.physics.add.staticGroup()
-        // this.platforms.create(this.gw / 2, this.gh / 2, "ground")
+
+        this.time.addEvent({
+            delay: 1000,
+            repeat: -1,
+            callback: () => {
+                this.timeelapsed++
+            },
+        })
         
-        this.ground = this.physics.add.staticSprite(this.gw / 2, this.gh - 100, "ground")
+        this.ground = this.physics.add.staticSprite(this.gw / 2, this.gh - 90, "ground")
         .setImmovable(true)
         .setGravity(0)
 
-        this.player = this.physics.add.sprite(this.gw / 2, this.gh / 2, "player")
+        this.player = this.physics.add.sprite(200, this.gh - 300, "player")
         .setBounce(0)
         .setInteractive()
+        .setDamping(true)
+        .setDrag(0.2, 1)
 
         this.plat1 = this.physics.add.staticSprite(this.gw - 450, this.gh - 500, "platform")
 
@@ -42,37 +52,30 @@ class PlatformerStage2Scene extends Phaser.Scene {
         this.crystalheart = this.sound.add("get crystal heart")
     
         this.addColliders()
-        this.addControls()
+        this.pollControls()
+    }
+
+    update() {
+        this.pollControls()
     }
     
-    addControls() {
+    pollControls() {
 
         let vel = 300
 
         this.wkey = this.input.keyboard.addKey("W")
-        .on("down", () => {
-            if (this.player.body.touching.down) {
-                this.player.setVelocityY(-900)
-            }
-        })
-
         this.akey = this.input.keyboard.addKey("A")
-        .on("down", () => {
-            this.player.setVelocityX(-vel)
-        })
-        .on("up", () => {
-            if (this.dkey.isDown) this.player.setVelocityX(vel)
-            else this.player.setVelocityX(0)
-
-        })
         this.dkey = this.input.keyboard.addKey("D")
-        .on("down", () => {
+
+        if (this.akey.isDown) {
+            this.player.setVelocityX(-vel)
+        }
+        if (this.dkey.isDown) {
             this.player.setVelocityX(vel)
-        })
-        .on("up", () => {
-            if (this.akey.isDown) this.player.setVelocityX(-vel)
-            else this.player.setVelocityX(0)
-        })
+        }
+        if (this.wkey.isDown && this.player.body.touching.down) {
+            this.player.setVelocityY(-900)
+        }
 
     }
 
@@ -82,8 +85,15 @@ class PlatformerStage2Scene extends Phaser.Scene {
         this.physics.add.collider(this.plat1, this.player)
         this.physics.add.collider(this.plat2, this.player)
         this.physics.add.overlap(this.strawberry, this.player, () => {
-            this.crystalheart.play()
+            // this.crystalheart.play()
             this.strawberry.destroy()
+            this.scene.sleep(this)
+            let scenedata = {
+                timeelapsed: this.timeelapsed,
+                nextScene: "stage3",
+                inst: "Push the crate onto the strawberry."
+            }
+            this.scene.launch("results", scenedata)
         })
     }
 
